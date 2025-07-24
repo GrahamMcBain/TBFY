@@ -132,10 +132,21 @@ export default function Home() {
         {/* Made Possible By Section */}
         <div className="px-4 py-12 mt-8">
           <h2 className="text-4xl font-black mb-6 text-white">MADE POSSIBLE BY</h2>
-          <div className="bg-yellow-400 text-black font-bold py-8 px-8 rounded-lg max-w-2xl">
+          <div className="bg-yellow-400 text-black font-bold py-8 px-8 rounded-lg max-w-2xl mb-8">
             <div className="text-2xl">
               TBPN viewers who refuse to be interrupted during the sacred 11am-2pm PST window
             </div>
+          </div>
+          
+          {/* Legal Links */}
+          <div className="flex flex-wrap justify-center gap-4 text-gray-400 text-sm">
+            <a href="/privacy" className="hover:text-white transition-colors">Privacy Policy</a>
+            <span>•</span>
+            <a href="/terms" className="hover:text-white transition-colors">Terms of Service</a>
+            <span>•</span>
+            <a href="/support" className="hover:text-white transition-colors">Support</a>
+            <span>•</span>
+            <a href="mailto:grahammcbain@gmail.com" className="hover:text-white transition-colors">Contact</a>
           </div>
         </div>
       </div>
