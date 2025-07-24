@@ -96,6 +96,9 @@ function SetupContent() {
   const [isComplete, setIsComplete] = useState(false);
   const [accessToken, setAccessToken] = useState('');
   const [userEmail, setUserEmail] = useState('');
+  const [isUndoing, setIsUndoing] = useState(false);
+  const [undoComplete, setUndoComplete] = useState(false);
+  const [deletedCount, setDeletedCount] = useState(0);
 
   useEffect(() => {
     const token = searchParams.get('access_token');
@@ -103,7 +106,43 @@ function SetupContent() {
     
     if (token) setAccessToken(token);
     if (email) setUserEmail(email);
+    
+    // Check if this is an undo action
+    const action = localStorage.getItem('tbfy_action');
+    if (action === 'undo' && token) {
+      localStorage.removeItem('tbfy_action');
+      handleUndo(token);
+    }
   }, [searchParams]);
+
+  const handleUndo = async (token: string) => {
+    setIsUndoing(true);
+    
+    try {
+      const response = await fetch('/api/calendar/delete-events', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          accessToken: token,
+        }),
+      });
+
+      if (response.ok) {
+        const data = await response.json();
+        setDeletedCount(data.eventsDeleted);
+        setUndoComplete(true);
+      } else {
+        throw new Error('Failed to delete calendar events');
+      }
+    } catch (error) {
+      console.error('Error deleting events:', error);
+      alert('Error removing calendar events. Please try again.');
+    } finally {
+      setIsUndoing(false);
+    }
+  };
 
   const createTBFYEvents = async () => {
     if (!selectedRole || !accessToken) return;
@@ -135,6 +174,29 @@ function SetupContent() {
     }
   };
 
+  if (undoComplete) {
+    return (
+      <div className="min-h-screen bg-black text-white flex items-center justify-center px-4">
+        <div className="text-center max-w-2xl">
+          <div className="text-6xl mb-8">🗑️</div>
+          <h1 className="text-4xl font-bold mb-4">TBFY Events Removed!</h1>
+          <p className="text-xl text-gray-300 mb-8">
+            Successfully removed {deletedCount} TBFY calendar events from your calendar.
+          </p>
+          <p className="text-gray-400 mb-8">
+            Your calendar is now back to normal. You can re-protect it anytime by visiting the homepage.
+          </p>
+          <a 
+            href="/"
+            className="bg-emerald-600 hover:bg-emerald-700 text-white font-bold py-3 px-6 rounded-lg transition-colors duration-200"
+          >
+            Back to Home
+          </a>
+        </div>
+      </div>
+    );
+  }
+
   if (isComplete) {
     return (
       <div className="min-h-screen bg-black text-white flex items-center justify-center px-4">
@@ -153,6 +215,23 @@ function SetupContent() {
           >
             Back to Home
           </a>
+        </div>
+      </div>
+    );
+  }
+
+  if (isUndoing) {
+    return (
+      <div className="min-h-screen bg-black text-white flex items-center justify-center px-4">
+        <div className="text-center max-w-2xl">
+          <div className="text-6xl mb-8">🗑️</div>
+          <h1 className="text-4xl font-bold mb-4">Removing TBFY Events...</h1>
+          <p className="text-xl text-gray-300 mb-8">
+            Please wait while we remove all TBFY calendar events from your calendar.
+          </p>
+          <div className="animate-spin inline-block w-8 h-8 border-4 border-current border-t-transparent text-blue-600 rounded-full" role="status">
+            <span className="sr-only">Loading...</span>
+          </div>
         </div>
       </div>
     );

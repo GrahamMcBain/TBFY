@@ -4,6 +4,7 @@ import { useState } from 'react';
 
 export default function Home() {
   const [showAuth, setShowAuth] = useState(false);
+  const [isUndoing, setIsUndoing] = useState(false);
 
   const handleGetStarted = async () => {
     setShowAuth(true);
@@ -22,6 +23,31 @@ export default function Home() {
       console.error('Error starting auth:', error);
       alert('Error starting authentication. Please make sure environment variables are configured.');
       setShowAuth(false);
+    }
+  };
+
+  const handleUndo = async () => {
+    if (!confirm('Are you sure you want to remove all TBFY calendar events? This cannot be undone.')) {
+      return;
+    }
+
+    setIsUndoing(true);
+    try {
+      // Get Google OAuth URL first
+      const authResponse = await fetch('/api/auth/google/url');
+      const authData = await authResponse.json();
+      
+      if (authData.authUrl) {
+        // Store the undo intent and redirect to Google OAuth
+        localStorage.setItem('tbfy_action', 'undo');
+        window.location.href = authData.authUrl;
+      } else {
+        throw new Error('No auth URL received');
+      }
+    } catch (error) {
+      console.error('Error starting undo:', error);
+      alert('Error starting undo process. Please try again.');
+      setIsUndoing(false);
     }
   };
 
@@ -81,13 +107,23 @@ export default function Home() {
         {/* Get Started Section */}
         <div className="px-4 py-8 text-center">
           <h2 className="text-4xl font-black mb-8 text-white">GET STARTED</h2>
-          <div className="max-w-2xl mx-auto">
+          <div className="max-w-2xl mx-auto space-y-4">
             <button
               onClick={handleGetStarted}
-              className="bg-blue-600 hover:bg-blue-700 text-white font-bold py-8 px-12 rounded-lg text-xl transition-colors duration-200 flex items-center justify-center space-x-4 w-full"
+              disabled={showAuth}
+              className="bg-blue-600 hover:bg-blue-700 disabled:bg-blue-800 disabled:opacity-50 text-white font-bold py-8 px-12 rounded-lg text-xl transition-colors duration-200 flex items-center justify-center space-x-4 w-full"
             >
               <span className="text-3xl">📅</span>
-              <span>PROTECT YOUR TBPN VIEWING TIME</span>
+              <span>{showAuth ? 'REDIRECTING...' : 'PROTECT YOUR TBPN VIEWING TIME'}</span>
+            </button>
+            
+            <button
+              onClick={handleUndo}
+              disabled={isUndoing}
+              className="bg-red-600 hover:bg-red-700 disabled:bg-red-800 disabled:opacity-50 text-white font-bold py-4 px-8 rounded-lg text-lg transition-colors duration-200 flex items-center justify-center space-x-3 w-full"
+            >
+              <span className="text-2xl">🗑️</span>
+              <span>{isUndoing ? 'REMOVING...' : 'UNDO - REMOVE ALL TBFY EVENTS'}</span>
             </button>
           </div>
         </div>
@@ -96,7 +132,7 @@ export default function Home() {
         <div className="px-4 py-8 text-center">
           <h2 className="text-4xl font-black mb-8 text-white">HOW IT WORKS</h2>
           <p className="text-gray-300 text-lg mb-8 max-w-3xl mx-auto">
-            TBFY automatically blocks your calendar from 11am-2pm PST so you can watch The Boys' Pod Network without interruption. 
+            TBFY automatically blocks your calendar from 11am-2pm PST so you can watch TBPN Network without interruption. 
             Connect your Google Calendar, and we'll handle the rest – no more missing TBPN for meetings.
           </p>
           <div className="grid grid-cols-2 md:grid-cols-4 gap-4 max-w-4xl mx-auto">
