@@ -5,10 +5,24 @@ import { useState } from 'react';
 export default function Home() {
   const [showAuth, setShowAuth] = useState(false);
 
-  const handleGetStarted = () => {
+  const handleGetStarted = async () => {
     setShowAuth(true);
-    // TODO: Implement OAuth flow
-    console.log('Starting TBFY process...');
+    try {
+      // Get Google OAuth URL
+      const response = await fetch('/api/auth/google/url');
+      const data = await response.json();
+      
+      if (data.authUrl) {
+        // Redirect to Google OAuth
+        window.location.href = data.authUrl;
+      } else {
+        throw new Error('No auth URL received');
+      }
+    } catch (error) {
+      console.error('Error starting auth:', error);
+      alert('Error starting authentication. Please make sure environment variables are configured.');
+      setShowAuth(false);
+    }
   };
 
   return (
