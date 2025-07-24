@@ -82,10 +82,13 @@ function getRandomMeeting(role: string): string {
 }
 
 function getPSTDateTime(date: Date, hour: number): string {
-  const pstOffset = -8; // PST is UTC-8
-  const utcTime = new Date(date);
-  utcTime.setHours(hour + Math.abs(pstOffset), 0, 0, 0);
-  return utcTime.toISOString();
+  // Format: YYYY-MM-DDTHH:MM:SS (without timezone, since we specify timeZone separately)
+  const year = date.getFullYear();
+  const month = String(date.getMonth() + 1).padStart(2, '0');
+  const day = String(date.getDate()).padStart(2, '0');
+  const hourStr = String(hour).padStart(2, '0');
+  
+  return `${year}-${month}-${day}T${hourStr}:00:00`;
 }
 
 export async function POST(request: NextRequest) {
@@ -123,7 +126,7 @@ export async function POST(request: NextRequest) {
       for (const timeSlot of eventTimes) {
         const event = {
           summary: getRandomMeeting(role),
-          description: 'Protecting TBPN viewing time 📺',
+          description: 'TBFY Built with Ampcode.com',
           start: {
             dateTime: getPSTDateTime(date, timeSlot.start),
             timeZone: 'America/Los_Angeles',
