@@ -49,14 +49,25 @@ export default function Home() {
         </div>
       </div>
 
-      {/* Ready Indicator */}
+      {/* Built with Amp */}
       <div className="absolute top-4 right-4 flex items-center space-x-2 text-gray-400 text-sm">
-        <div className="w-2 h-2 bg-gray-400 rounded-full"></div>
-        <span>READY</span>
+        <span>Built with</span>
+        <a 
+          href="https://ampcode.com" 
+          target="_blank" 
+          rel="noopener noreferrer"
+          className="flex items-center hover:opacity-80 transition-opacity"
+        >
+          <img 
+            src="https://ampcode.com/amp-mark-color.svg" 
+            alt="Amp" 
+            className="w-4 h-4"
+          />
+        </a>
       </div>
       
       {/* Main Content */}
-      <div className="relative z-10">
+      <div className="relative z-10 max-w-6xl mx-auto">
         
         {/* Hero Section - TBFY Logo */}
         <div className="flex items-center justify-center h-96 px-4">
@@ -68,27 +79,27 @@ export default function Home() {
         </div>
 
         {/* Get Started Section */}
-        <div className="px-4 py-8">
+        <div className="px-4 py-8 text-center">
           <h2 className="text-4xl font-black mb-8 text-white">GET STARTED</h2>
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4 max-w-4xl">
+          <div className="max-w-2xl mx-auto">
             <button
               onClick={handleGetStarted}
-              className="bg-blue-600 hover:bg-blue-700 text-white font-bold py-8 px-6 rounded-lg text-xl transition-colors duration-200 flex items-center justify-center space-x-4"
+              className="bg-blue-600 hover:bg-blue-700 text-white font-bold py-8 px-12 rounded-lg text-xl transition-colors duration-200 flex items-center justify-center space-x-4 w-full"
             >
-              <span className="text-3xl">🔐</span>
-              <span>SIGN IN & SETUP</span>
-            </button>
-            <div className="bg-blue-700 text-white font-bold py-8 px-6 rounded-lg text-xl flex items-center justify-center space-x-4 opacity-75">
               <span className="text-3xl">📅</span>
-              <span>BLOCK CALENDAR</span>
-            </div>
+              <span>PROTECT YOUR TBPN VIEWING TIME</span>
+            </button>
           </div>
         </div>
 
         {/* How It Works Section */}
-        <div className="px-4 py-8">
+        <div className="px-4 py-8 text-center">
           <h2 className="text-4xl font-black mb-8 text-white">HOW IT WORKS</h2>
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-4 max-w-4xl">
+          <p className="text-gray-300 text-lg mb-8 max-w-3xl mx-auto">
+            TBFY automatically blocks your calendar from 11am-2pm PST so you can watch The Boys' Pod Network without interruption. 
+            Connect your Google Calendar, and we'll handle the rest – no more missing TBPN for meetings.
+          </p>
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-4 max-w-4xl mx-auto">
             <div className="bg-yellow-500 text-black font-bold py-6 px-4 rounded-lg text-center">
               <div className="text-2xl mb-2">🔐</div>
               <div className="text-sm font-bold">GOOGLE AUTH</div>
@@ -108,31 +119,12 @@ export default function Home() {
           </div>
         </div>
 
-        {/* Get TBFY Protected Section */}
-        <div className="px-4 py-8">
-          <h2 className="text-4xl font-black mb-6 text-white">GET TBFY PROTECTED</h2>
-          <div className="flex max-w-2xl">
-            <input
-              type="email"
-              placeholder="YOUR@EMAIL.COM"
-              className="flex-1 bg-gray-800 text-white px-6 py-4 rounded-l-lg text-lg border-2 border-gray-700 focus:border-emerald-500 focus:outline-none"
-            />
-            <button 
-              onClick={handleGetStarted}
-              className="bg-emerald-600 hover:bg-emerald-700 text-white font-bold px-8 py-4 rounded-r-lg text-lg transition-colors duration-200"
-            >
-              START NOW
-            </button>
-          </div>
-          <p className="text-gray-400 text-sm mt-2">
-            Protect your 11am-2pm PST window for uninterrupted TBPN viewing
-          </p>
-        </div>
+
 
         {/* Made Possible By Section */}
-        <div className="px-4 py-12 mt-8">
+        <div className="px-4 py-12 mt-8 text-center">
           <h2 className="text-4xl font-black mb-6 text-white">MADE POSSIBLE BY</h2>
-          <div className="bg-yellow-400 text-black font-bold py-8 px-8 rounded-lg max-w-2xl mb-8">
+          <div className="bg-yellow-400 text-black font-bold py-8 px-8 rounded-lg max-w-2xl mb-8 mx-auto">
             <div className="text-2xl">
               TBPN viewers who refuse to be interrupted during the sacred 11am-2pm PST window
             </div>
