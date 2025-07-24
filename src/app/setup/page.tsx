@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, Suspense } from 'react';
 import { useSearchParams } from 'next/navigation';
 
 const jobRoles = [
@@ -89,7 +89,7 @@ const meetingTemplates = {
   ]
 };
 
-export default function Setup() {
+function SetupContent() {
   const searchParams = useSearchParams();
   const [selectedRole, setSelectedRole] = useState('');
   const [isCreating, setIsCreating] = useState(false);
@@ -220,5 +220,20 @@ export default function Setup() {
         </div>
       </div>
     </div>
+  );
+}
+
+export default function Setup() {
+  return (
+    <Suspense fallback={
+      <div className="min-h-screen bg-black text-white flex items-center justify-center">
+        <div className="text-center">
+          <div className="text-4xl mb-4">⏳</div>
+          <p className="text-gray-400">Loading...</p>
+        </div>
+      </div>
+    }>
+      <SetupContent />
+    </Suspense>
   );
 }
